@@ -47,8 +47,6 @@ function PositionRegister() {
 
   const [agenda, setAgenda] = useState([]);
 
-  const [dataLista, setDataLista] = useState([]);
-
   const [data, setData] = useState({
     startDate: null,
     endDate: null,
@@ -56,16 +54,43 @@ function PositionRegister() {
 
   const [posicoes, setPosicoes] = useState([]);
 
-  const enderecos = [
-    {
-      label: "Av 23 de Maio",
-      value: "Av 23 de Maio",
-    },
-    {
-      label: "Av. Paulista",
-      value: "Av. Paulista",
-    },
-  ];
+  const [enderecoLista, setEnderecoLista] = useState([]);
+
+  
+  
+
+
+  useEffect(() => {
+
+    const getEnderecos = async () => {
+        console.log("Get endereços");
+        const enderecos=[];
+        try {
+            const company = await axios.get(
+              "http://localhost:3000/companies/1",
+              {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+              }
+            );
+            console.log(company.data.enderecos);
+            company.data.enderecos.map((item) => (
+                
+                enderecos.push({
+                    label: item,
+                    value: item,
+                  })
+              ))
+           
+            setEnderecoLista(enderecos);
+          } catch (error) {
+            console.log(error);
+          }
+    }
+
+    getEnderecos();   
+
+  }, []);
 
   const atualizaEndereco = (e) => {
     setEndereco(e.target.value);
@@ -157,7 +182,7 @@ function PositionRegister() {
           <option value={"default"} disabled>
             {enderecoDefault}
           </option>
-          {enderecos.map((option, index) => (
+          {enderecoLista.map((option, index) => (
             <option key={index} value={option.value}>
               {option.label}
             </option>
@@ -205,15 +230,19 @@ function PositionRegister() {
             <Button onClick={addData}>+</Button>
           </div>
         </div>
-        {datas.length>0?(<Lista>
-          {datas.map((item, index) => (
-            <ListaItem key={index}>
-              <ListaTitulo>
-                Slot {index + 1}: {item.startDate}
-              </ListaTitulo>
-            </ListaItem>
-          ))}
-        </Lista>):(<></>)}
+        {datas.length > 0 ? (
+          <Lista>
+            {datas.map((item, index) => (
+              <ListaItem key={index}>
+                <ListaTitulo>
+                  Slot {index + 1}: {item.startDate}
+                </ListaTitulo>
+              </ListaItem>
+            ))}
+          </Lista>
+        ) : (
+          <></>
+        )}
         <Button type="submit">Registrar</Button>
       </Form>
 

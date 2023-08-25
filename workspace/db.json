@@ -25,7 +25,8 @@
       "password": "Se5#pu",
       "enderecos": [
         "Av. Paulista",
-        "25 de Março"
+        "25 de Março",
+        "Rua dos Médicos"
       ],
       "id": 1
     },
@@ -42,6 +43,7 @@
   ],
   "positions": [
     {
+      "id": 1,
       "endereco": "25 de Março",
       "departamento": "Festa",
       "sala": "6",
@@ -63,12 +65,12 @@
           "ocupante": ""
         },
         {
-          "data": "2023-09-04",
+          "data": "2023-09-06",
           "status": "disponivel",
           "ocupante": ""
         },
         {
-          "data": "2023-09-06",
+          "data": "2023-09-07",
           "status": "disponivel",
           "ocupante": ""
         }
@@ -87,15 +89,14 @@
           "endDate": "2023-08-29"
         },
         {
-          "startDate": "2023-09-04",
-          "endDate": "2023-09-04"
-        },
-        {
           "startDate": "2023-09-06",
           "endDate": "2023-09-06"
+        },
+        {
+          "startDate": "2023-09-07",
+          "endDate": "2023-09-07"
         }
-      ],
-      "id": 1
+      ]
     }
   ]
 }

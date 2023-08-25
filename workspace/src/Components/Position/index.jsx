@@ -9,8 +9,26 @@ import Datepicker from "react-tailwindcss-datepicker";
 
 import { getDates, getAgenda } from "../../Utils/dates";
 
+const dataPickerClass="w-full h-10 px-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline";
+
 const Card = tw.div`
 rounded-lg border border-slate-300 p-4
+`;
+
+const MainInfo = tw.div`
+pb-4
+`;
+
+const ButtonContainterList = tw.div`
+place-self-center float-right
+`;
+
+const ButtonContainterAdicionar = tw.div`
+
+`;
+
+const ButtonContainterAtualizar = tw.div`
+px-4
 `;
 
 import {
@@ -33,6 +51,8 @@ function Position({ position }) {
 
   const [agenda, setAgenda] = useState(position.agenda);
 
+  const [detalhes, setDetalhes] = useState(false);
+
   const [data, setData] = useState({
     startDate: null,
     endDate: null,
@@ -41,6 +61,14 @@ function Position({ position }) {
   const handleDataChange = (newData) => {
     console.log("newData:", newData);
     setData(newData);
+  };
+
+  const showDetalhes = () => {
+    if (detalhes) {
+      setDetalhes(false);
+    } else {
+      setDetalhes(true);
+    }
   };
 
   const addData = (e) => {
@@ -79,6 +107,7 @@ function Position({ position }) {
       sala: posicaoAtual.sala,
       mesa: posicaoAtual.mesa,
       agenda: agenda,
+      datasAgendadas: datasCadastradas,
     };
 
     setData({
@@ -106,46 +135,55 @@ function Position({ position }) {
 
   return (
     <Card>
-      <h2>
-        <strong>Endereço:</strong> {posicaoAtual.endereco}
-      </h2>
-      <p>
-        <strong>Departamento:</strong> {posicaoAtual.departamento}
-      </p>
-      <p>
-        <strong>Sala:</strong> {posicaoAtual.sala}
-      </p>
-      <p>
-        <strong>Mesa:</strong> {posicaoAtual.mesa}
-      </p>
+      <MainInfo>
+        <h2>
+          <strong>Endereço:</strong> {posicaoAtual.endereco}
+        </h2>
+        <p>
+          <strong>Departamento:</strong> {posicaoAtual.departamento}
+        </p>
+        <p>
+          <strong>Sala:</strong> {posicaoAtual.sala}
+        </p>
+        <p>
+          <strong>Mesa:</strong> {posicaoAtual.mesa}
+        </p>
+      </MainInfo>
 
-      <Lista>
-        {agenda.map((item, index) => (
-          <ListaItem key={index}>
-            <ListaTitulo>
-              Slot {index + 1}: {item.data} - {item.status}
-            </ListaTitulo>
-            <div className="place-self-center float-right">
-              <Button onClick={() => removeDates(index)}>-</Button>
-            </div>
-          </ListaItem>
-        ))}
+      <Button onClick={showDetalhes}>Detalhes</Button>
+      {detalhes ? (
+        <Lista>
+          {agenda.map((item, index) => (
+            <ListaItem key={index}>
+              <ListaTitulo>
+                Slot {index + 1}: {item.data} - {item.status}
+              </ListaTitulo>
+              <ButtonContainterList>
+                <Button onClick={() => removeDates(index)}>-</Button>
+              </ButtonContainterList>
+            </ListaItem>
+          ))}
 
-        <div className="flex p-4">
-          <Datepicker
-            inputClassName="w-full h-10 px-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
-            disabledDates={datasCadastradas}
-            placeholder={"Adicione um período de reserva"}
-            minDate={new Date()}
-            value={data}
-            onChange={handleDataChange}
-          />
-          <div className="">
-            <Button onClick={addData}>+</Button>
+          <div className="flex p-4">
+            <Datepicker
+              inputClassName={dataPickerClass}
+              disabledDates={datasCadastradas}
+              placeholder={"Adicione um período de reserva"}
+              minDate={new Date()}
+              value={data}
+              onChange={handleDataChange}
+            />
+            <ButtonContainterAdicionar>
+              <Button onClick={addData}>+</Button>
+            </ButtonContainterAdicionar>
           </div>
-        </div>
-        {/**  <Button onClick={atualizaPosicao}>Atualiza</Button>**/}
-      </Lista>
+          <ButtonContainterAtualizar>
+            <Button onClick={atualizaPosicao}>Atualiza</Button>
+          </ButtonContainterAtualizar>
+        </Lista>
+      ) : (
+        <></>
+      )}
     </Card>
   );
 }
