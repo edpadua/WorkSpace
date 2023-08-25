@@ -1,0 +1,101 @@
+{
+  "professionals": [
+    {
+      "name": "Antônio",
+      "cpf": "333.444.031-77",
+      "email": "antonio@email.com",
+      "password": "Se5#yu",
+      "endereco": "Av. São João",
+      "id": 1
+    },
+    {
+      "name": "José Carlos",
+      "cpf": "300.328.058-26",
+      "email": "carlos@email.com",
+      "password": "De7#yu",
+      "endereco": "Rua Piracicaba",
+      "id": 2
+    }
+  ],
+  "companies": [
+    {
+      "name": "Jujuba Design",
+      "cnpj": "31.757.878/0002-23",
+      "email": "jujuba@email.com",
+      "password": "Se5#pu",
+      "enderecos": [
+        "Av. Paulista",
+        "25 de Março"
+      ],
+      "id": 1
+    },
+    {
+      "name": "Gower Foods",
+      "cnpj": "55.708.178/0085-88",
+      "email": "goweroods@email.com",
+      "password": "We7#u4",
+      "enderecos": [
+        "Av. Nossa Senhora"
+      ],
+      "id": 2
+    }
+  ],
+  "positions": [
+    {
+      "endereco": "25 de Março",
+      "departamento": "Festa",
+      "sala": "6",
+      "mesa": "2",
+      "agenda": [
+        {
+          "data": "2023-08-27",
+          "status": "disponivel",
+          "ocupante": ""
+        },
+        {
+          "data": "2023-08-28",
+          "status": "disponivel",
+          "ocupante": ""
+        },
+        {
+          "data": "2023-08-29",
+          "status": "disponivel",
+          "ocupante": ""
+        },
+        {
+          "data": "2023-09-04",
+          "status": "disponivel",
+          "ocupante": ""
+        },
+        {
+          "data": "2023-09-06",
+          "status": "disponivel",
+          "ocupante": ""
+        }
+      ],
+      "datasAgendadas": [
+        {
+          "startDate": "2023-08-27",
+          "endDate": "2023-08-27"
+        },
+        {
+          "startDate": "2023-08-28",
+          "endDate": "2023-08-28"
+        },
+        {
+          "startDate": "2023-08-29",
+          "endDate": "2023-08-29"
+        },
+        {
+          "startDate": "2023-09-04",
+          "endDate": "2023-09-04"
+        },
+        {
+          "startDate": "2023-09-06",
+          "endDate": "2023-09-06"
+        }
+      ],
+      "id": 1
+    }
+  ]
+}
