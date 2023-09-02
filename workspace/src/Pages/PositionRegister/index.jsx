@@ -67,12 +67,13 @@ function PositionRegister() {
         const enderecos=[];
         try {
             const company = await axios.get(
-              "http://localhost:3000/companies/1",
+              "http://localhost:3000/companies/64f09b62bb31c29552ced31f",
               {
                 headers: { "Content-Type": "application/json" },
-                withCredentials: true,
+                
               }
             );
+            console.log(company);
             console.log(company.data.enderecos);
             company.data.enderecos.map((item) => (
                 

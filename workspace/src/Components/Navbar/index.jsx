@@ -4,6 +4,8 @@ import { BiSolidUser } from "react-icons/bi";
 
 import { Link } from "react-router-dom";
 
+import { useState } from "react";
+
 const Nav = tw.nav`
     bg-teal-400
     top-0 
@@ -36,6 +38,11 @@ const Menu = tw.div`
 
 function Navbar() {
   
+  const token = sessionStorage.getItem('token')
+
+  const name = sessionStorage.getItem('name')
+
+  const [userLogged, setUserLogged] = useState(token != null)
 
   return (
     <Nav>
@@ -57,6 +64,11 @@ function Navbar() {
             </Li>
           </ol>
         </Menu>
+        {userLogged &&
+                <div>
+                    <p>{name}</p>
+                </div>
+            }
       </NavContainer>
     </Nav>
   );

@@ -21,6 +21,8 @@ const USER_REGISTER_URL = "/register";
 function UserRegister() {
   const tipoDefault = "Selecione um tipo de usuário";
 
+  const emailMensagem="Email já utilizado por outro usuário";
+
   const tipos = [
     {
       label: "Profissional",
@@ -41,6 +43,8 @@ function UserRegister() {
   const [enderecoCount, setEnderecoCount] = useState(0);
 
   const [clickSubmit, setClickSubmit] = useState(false);
+
+  const [emailExiste, setEmailExiste] = useState(false);
 
   const {
     register,
@@ -94,12 +98,14 @@ function UserRegister() {
           JSON.stringify(profissional),
           {
             headers: { "Content-Type": "application/json" },
-            withCredentials: true,
+           
           }
         );
         console.log(JSON.stringify(response?.data));
+        setEmailExiste(false);
       } catch (error) {
-        console.log(error);
+        console.log("Error",error);
+        setEmailExiste(true);
       }
     } else {
       try {
@@ -109,7 +115,7 @@ function UserRegister() {
           JSON.stringify(empresa),
           {
             headers: { "Content-Type": "application/json" },
-            withCredentials: true,
+            
           }
         );
         console.log(JSON.stringify(response?.data));
@@ -216,6 +222,7 @@ function UserRegister() {
           })}
         />
         {errors.email && <Error>{errors.email.message}</Error>}
+        {emailExiste && <Error>{emailMensagem}</Error>}
         <Input
           type="password"
           placeholder="Digite a senha"
