@@ -6,6 +6,8 @@ import tw from "tailwind-styled-components";
 
 import axios from "axios";
 
+import { Link } from "react-router-dom";
+
 import {
   Form,
   Input,
@@ -71,7 +73,7 @@ function Login() {
         try {
           console.log("Professional", profissional);
           const response = await axios.post(
-            "http://localhost:3000/auth/login/",
+            "http://localhost:3000/auth/login_professional/",
             JSON.stringify(profissional),
             {
               headers: { "Content-Type": "application/json" },
@@ -79,10 +81,11 @@ function Login() {
             }
           );
           console.log("token",JSON.stringify(response?.data.token));
-          sessionStorage.setItem('token', response.data.token)
-          sessionStorage.setItem('email', response.data.email)
-          sessionStorage.setItem('name', response.data.name)
-          sessionStorage.setItem('type', "professional")
+          sessionStorage.setItem('token', response.data.token);
+          sessionStorage.setItem('email', response.data.email);
+          sessionStorage.setItem('name', response.data.name);
+          sessionStorage.setItem('id', response.data.id);
+          sessionStorage.setItem('type', "professional");
           window.location.reload()
         } catch (error) {
           console.log("Error",error);
@@ -92,7 +95,7 @@ function Login() {
         try {
             console.log("Company", company);
             const response = await axios.post(
-              "http://localhost:3000/auth/login/",
+              "http://localhost:3000/auth/login_company/",
               JSON.stringify(company),
               {
                 headers: { "Content-Type": "application/json" },
@@ -100,7 +103,13 @@ function Login() {
               }
             );
           console.log("Empresa", company);
-          
+          console.log("token",JSON.stringify(response?.data.token));
+          sessionStorage.setItem('token', response.data.token);
+          sessionStorage.setItem('email', response.data.email);
+          sessionStorage.setItem('name', response.data.name);
+          sessionStorage.setItem('type', "company");
+          sessionStorage.setItem('id', response.data.id);
+          window.location.reload()
         } catch (error) {
           console.log(error);
         }
@@ -152,7 +161,12 @@ function Login() {
         {errors.password && <Error>{errors.password.message}</Error>}
 
         <Button type="submit">Login</Button>
-      </Form>
+      </Form>  
+      <div className="pt-4"> 
+        <Link className="text-teal-400 font-bold" to="/userregister">Cadastro</Link>
+      </div>
+     
+            
     </div>
   );
 }

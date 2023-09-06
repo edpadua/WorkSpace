@@ -119,8 +119,10 @@ function UserRegister() {
           }
         );
         console.log(JSON.stringify(response?.data));
+        setEmailExiste(false);
       } catch (error) {
         console.log(error);
+        setEmailExiste(true);
       }
     }
   };

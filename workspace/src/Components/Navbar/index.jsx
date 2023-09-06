@@ -47,11 +47,12 @@ function Navbar() {
 
   const logout = () => {
     setUserLogged(false);
+    sessionStorage.removeItem("id", null);
     sessionStorage.removeItem("token", null);
     sessionStorage.removeItem("email", null);
     sessionStorage.removeItem("name", null);
     sessionStorage.removeItem("type", null);
-    window.location.reload()
+  
    
   };
 
@@ -68,19 +69,21 @@ function Navbar() {
       <NavContainer>
         <BiSolidUser style={{ fontSize: "40px", color: "#ffffff" }} />
         <Menu>
-          <ol className="navbar-nav flex">
-            <Li>
+          <ol className="navbar-nav flex">{
+          sessionStorage.getItem('token')?(<><Li>
               <Link to="/">Início</Link>
             </Li>
             <Li>
-              <Link to="/userregister">Usuários</Link>
-            </Li>
-            <Li>
-              <Link to="/positionregister">Posições</Link>
-            </Li>
-            <Li>
               <Link to="/panel">Painel</Link>
-            </Li>
+            </Li></>
+            ):(<></>)}
+            
+            
+            {sessionStorage.getItem('type')=="company"?(<Li>
+              <Link to="/positionregister">Posições</Link>
+            </Li>):(<></>)}
+            
+            
           </ol>
         </Menu>
         {sessionStorage.getItem('token') &&
@@ -88,7 +91,8 @@ function Navbar() {
             <div>
               <p>{name}</p>
             </div>
-            <a className="cursor-pointer text-white font-bold" onClick={logout}>Logout</a>
+            
+            <Link className="cursor-pointer text-white font-bold" to="/" onClick={logout}>Logout</Link>
           </>
         }
       </NavContainer>

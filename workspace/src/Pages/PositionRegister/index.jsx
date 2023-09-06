@@ -65,9 +65,11 @@ function PositionRegister() {
     const getEnderecos = async () => {
         console.log("Get endereços");
         const enderecos=[];
+        const id=sessionStorage.getItem('id');
+        console.log("id company",id);
         try {
             const company = await axios.get(
-              "http://localhost:3000/companies/64f09b62bb31c29552ced31f",
+              `http://localhost:3000/companies/${id}`,
               {
                 headers: { "Content-Type": "application/json" },
                 
@@ -88,8 +90,10 @@ function PositionRegister() {
             console.log(error);
           }
     }
-
-    getEnderecos();   
+ 
+    if(sessionStorage.getItem('type')=="company"){
+      getEnderecos();   
+    }
 
   }, []);
 
@@ -120,6 +124,7 @@ function PositionRegister() {
   const onSubmit = async (data) => {
     console.log("data", data);
     const position = {
+      id_company: sessionStorage.getItem('id'),
       endereco: endereco,
       departamento: data.departamento,
       sala: data.sala,
@@ -151,7 +156,6 @@ function PositionRegister() {
         JSON.stringify(position),
         {
           headers: { "Content-Type": "application/json" },
-          withCredentials: true,
         }
       );
       console.log(JSON.stringify(response?.data));
@@ -250,8 +254,9 @@ function PositionRegister() {
       <ListaPosicoes>
         <SecaoTitulo>Posições Cadastradas</SecaoTitulo>
         {posicoes.length > 0 &&
-          posicoes.map((posicao, index) => (
-            <Position key={index} position={posicao} />
+          posicoes.map((position, index) => (
+            position.id_company==sessionStorage.getItem('id')&&position.endereco==endereco?(<Position key={index} position={position} />):(<></>)
+            
           ))}
       </ListaPosicoes>
     </div>

@@ -20,7 +20,7 @@ function Home() {
  
   return <div>
     
-    {!userLogged && <Login />}
+    {!sessionStorage.getItem('token') && <Login />}
     </div>;
 }
 
