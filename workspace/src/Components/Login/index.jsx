@@ -55,7 +55,7 @@ function Login() {
       password: data.password,
     };
 
-    const empresa = {
+    const company = {
       email: data.email,
       password: data.password,
     };
@@ -82,13 +82,24 @@ function Login() {
           sessionStorage.setItem('token', response.data.token)
           sessionStorage.setItem('email', response.data.email)
           sessionStorage.setItem('name', response.data.name)
+          sessionStorage.setItem('type', "professional")
+          window.location.reload()
         } catch (error) {
           console.log("Error",error);
           
         }
       } else {
         try {
-          console.log("Empresa", empresa);
+            console.log("Company", company);
+            const response = await axios.post(
+              "http://localhost:3000/auth/login/",
+              JSON.stringify(company),
+              {
+                headers: { "Content-Type": "application/json" },
+               
+              }
+            );
+          console.log("Empresa", company);
           
         } catch (error) {
           console.log(error);

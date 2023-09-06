@@ -19,8 +19,8 @@ function Home() {
 }, []);
  
   return <div>
-    <p>{sessionStorage.getItem('token')}</p>
-    {!userLogged?(<Login />):(<><p>logado</p><Login /></>)}
+    
+    {!userLogged && <Login />}
     </div>;
 }
 

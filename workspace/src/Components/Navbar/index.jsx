@@ -43,20 +43,22 @@ function Navbar() {
 
   const token = sessionStorage.getItem('token');
 
-  const [userLogged, setUserLogged] = useState(token != null);
+  const [userLogged, setUserLogged] = useState(token !== null);
 
   const logout = () => {
     setUserLogged(false);
     sessionStorage.removeItem("token", null);
     sessionStorage.removeItem("email", null);
     sessionStorage.removeItem("name", null);
+    sessionStorage.removeItem("type", null);
+    window.location.reload()
    
   };
 
   useEffect(() => {
     console.log("token",sessionStorage.getItem('token'))
     console.log("Logged",userLogged)
-    setUserLogged(sessionStorage.getItem('token') != null)
+    setUserLogged(sessionStorage.getItem('token') !== null)
 }, []);
 
  
@@ -81,12 +83,12 @@ function Navbar() {
             </Li>
           </ol>
         </Menu>
-        {userLogged &&
+        {sessionStorage.getItem('token') &&
           <>
             <div>
               <p>{name}</p>
             </div>
-            <a onClick={logout}>Logout</a>
+            <a className="cursor-pointer text-white font-bold" onClick={logout}>Logout</a>
           </>
         }
       </NavContainer>
