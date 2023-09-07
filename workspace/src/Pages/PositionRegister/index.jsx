@@ -56,45 +56,37 @@ function PositionRegister() {
 
   const [enderecoLista, setEnderecoLista] = useState([]);
 
-  
-  
-
-
   useEffect(() => {
-
     const getEnderecos = async () => {
-        console.log("Get endereços");
-        const enderecos=[];
-        const id=sessionStorage.getItem('id');
-        console.log("id company",id);
-        try {
-            const company = await axios.get(
-              `http://localhost:3000/companies/${id}`,
-              {
-                headers: { "Content-Type": "application/json" },
-                
-              }
-            );
-            console.log(company);
-            console.log(company.data.enderecos);
-            company.data.enderecos.map((item) => (
-                
-                enderecos.push({
-                    label: item,
-                    value: item,
-                  })
-              ))
-           
-            setEnderecoLista(enderecos);
-          } catch (error) {
-            console.log(error);
+      console.log("Get endereços");
+      const enderecos = [];
+      const id = sessionStorage.getItem("id");
+      console.log("id company", id);
+      try {
+        const company = await axios.get(
+          `http://localhost:3000/companies/${id}`,
+          {
+            headers: { "Content-Type": "application/json" },
           }
-    }
- 
-    if(sessionStorage.getItem('type')=="company"){
-      getEnderecos();   
-    }
+        );
+        console.log(company);
+        console.log(company.data.enderecos);
+        company.data.enderecos.map((item) =>
+          enderecos.push({
+            label: item,
+            value: item,
+          })
+        );
 
+        setEnderecoLista(enderecos);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (sessionStorage.getItem("type") == "company") {
+      getEnderecos();
+    }
   }, []);
 
   const atualizaEndereco = (e) => {
@@ -124,7 +116,7 @@ function PositionRegister() {
   const onSubmit = async (data) => {
     console.log("data", data);
     const position = {
-      id_company: sessionStorage.getItem('id'),
+      id_company: sessionStorage.getItem("id"),
       endereco: endereco,
       departamento: data.departamento,
       sala: data.sala,
@@ -252,12 +244,23 @@ function PositionRegister() {
       </Form>
 
       <ListaPosicoes>
-        <SecaoTitulo>Posições Cadastradas</SecaoTitulo>
+        {posicoes.filter(
+          (position) => position.id_company == sessionStorage.getItem("id")
+        ).length > 0 && posicoes.filter(
+          (position) => position.endereco == endereco
+        ).length > 0 && <SecaoTitulo>Posições Cadastradas</SecaoTitulo>}
+
         {posicoes.length > 0 &&
-          posicoes.map((position, index) => (
-            position.id_company==sessionStorage.getItem('id')&&position.endereco==endereco?(<Position key={index} position={position} />):(<></>)
-            
-          ))}
+          posicoes.map((position, index) =>
+            position.id_company == sessionStorage.getItem("id") &&
+            position.endereco == endereco ? (
+              <div key={index} className="pb-4">
+                <Position position={position} />
+              </div>
+            ) : (
+              <div key={index}></div>
+            )
+          )}
       </ListaPosicoes>
     </div>
   );

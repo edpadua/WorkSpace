@@ -4,7 +4,9 @@ import { BiSolidUser } from "react-icons/bi";
 
 import { Link } from "react-router-dom";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+
+import { UserContext } from "../../Contexts/User";
 
 const Nav = tw.nav`
     bg-teal-400
@@ -37,64 +39,78 @@ const Menu = tw.div`
 `;
 
 function Navbar() {
-  
+  const name2 = sessionStorage.getItem("name");
 
-  const name = sessionStorage.getItem('name');
+  const token2 = sessionStorage.getItem("token");
 
-  const token = sessionStorage.getItem('token');
+  const [userLogged, setUserLogged] = useState(token2 !== null);
 
-  const [userLogged, setUserLogged] = useState(token !== null);
+  const { token, setToken, name, setName, type, setType }  = useContext(UserContext);
 
   const logout = () => {
     setUserLogged(false);
     sessionStorage.removeItem("id", null);
     sessionStorage.removeItem("token", null);
+    setToken("");
     sessionStorage.removeItem("email", null);
     sessionStorage.removeItem("name", null);
+    setName("");
     sessionStorage.removeItem("type", null);
-  
-   
+    setType("");
   };
 
-  useEffect(() => {
-    console.log("token",sessionStorage.getItem('token'))
-    console.log("Logged",userLogged)
-    setUserLogged(sessionStorage.getItem('token') !== null)
-}, []);
-
- 
+  
 
   return (
     <Nav>
       <NavContainer>
         <BiSolidUser style={{ fontSize: "40px", color: "#ffffff" }} />
         <Menu>
-          <ol className="navbar-nav flex">{
-          sessionStorage.getItem('token')?(<><Li>
-              <Link to="/">Início</Link>
-            </Li>
-            <Li>
-              <Link to="/panel">Painel</Link>
-            </Li></>
-            ):(<></>)}
-            
-            
-            {sessionStorage.getItem('type')=="company"?(<Li>
-              <Link to="/positionregister">Posições</Link>
-            </Li>):(<></>)}
-            
-            
+          <ol className="navbar-nav flex">
+            {token != "" ? (
+              <>
+                <Li>
+                  <Link to="/">Início</Link>
+                </Li>
+                <Li>
+                  <Link to="/panel">Painel</Link>
+                </Li>
+              </>
+            ) : (
+              <></>
+            )}
+
+            {type == "company" ? (
+              <Li>
+                <Link to="/positionregister">Posições</Link>
+              </Li>
+            ) : (
+              <></>
+            )}
+
+            {type == "professional" ? (
+              <Li>
+                <Link to="/schedule">Reservar</Link>
+              </Li>
+            ) : (
+              <></>
+            )}
           </ol>
         </Menu>
-        {sessionStorage.getItem('token') &&
+        {token && (
           <>
-            <div>
-              <p>{name}</p>
-            </div>
             
-            <Link className="cursor-pointer text-white font-bold" to="/" onClick={logout}>Logout</Link>
+            <div className="justify-center self-center">
+              <Link
+                className="cursor-pointer text-white font-bold"
+                to="/"
+                onClick={logout}
+              >
+                Logout
+              </Link>
+            </div>
           </>
-        }
+        )}
       </NavContainer>
     </Nav>
   );

@@ -4,13 +4,18 @@ export const UserContext = createContext();
 UserContext.displayName = "User"
 
 export default function UserProvider({ children }) {
-    const [nome, setNome] = useState('');
-    const [saldo, setSaldo] = useState(0);
+    const [token, setToken] = useState('');
+    const [name, setName] = useState('');
+    const [type, setType] = useState('');
     return (
       <UserContext.Provider
         value={{
-          nome,
-          setNome,
+          token,
+          setToken,
+          name,
+          setName,
+          type,
+          setType
         }}
       >
         {children}

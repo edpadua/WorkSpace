@@ -2,7 +2,9 @@
 
 import { Outlet } from 'react-router-dom'
 
+import { useContext ,useEffect } from "react";
 
+import {UserContext} from "./Contexts/User"
 
 import tw from "tailwind-styled-components";
 import Navbar from "./Components/Navbar";
@@ -15,6 +17,15 @@ const Container = tw.div`
 `;
 
 function App() {
+  const { token, setToken, name, setName, type, setType } = useContext(UserContext);
+
+  useEffect(() => {
+    console.log("Use effect ran");
+    setToken(sessionStorage.getItem("token"));
+    setName(sessionStorage.getItem("name"));
+    setType(sessionStorage.getItem("type"));
+  },[]);
+
   return (
     <>
       

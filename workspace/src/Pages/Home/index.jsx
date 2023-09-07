@@ -1,13 +1,17 @@
 import Login from "../../Components/Login";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
-
+import {UserContext} from "../../Contexts/User"
 
 function Home() {
   
 
-  const token = sessionStorage.getItem('token');
+ 
+
+ 
+
+  const { token, setToken, name, setName, type, setType } = useContext(UserContext);
 
   const [userLogged, setUserLogged] = useState(token != null);
   
@@ -20,7 +24,7 @@ function Home() {
  
   return <div>
     
-    {!sessionStorage.getItem('token') && <Login />}
+    {!token && <Login />}
     </div>;
 }
 

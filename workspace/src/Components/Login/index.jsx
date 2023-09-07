@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 import { useForm, useController } from "react-hook-form";
+
+import { useNavigate } from "react-router-dom";
 
 import tw from "tailwind-styled-components";
 
 import axios from "axios";
 
 import { Link } from "react-router-dom";
+
+import {UserContext} from "../../Contexts/User"
 
 import {
   Form,
@@ -18,7 +22,10 @@ import {
   ListaTitulo,
 } from "../../GlobalStyles";
 
+
+
 function Login() {
+  const navigate = useNavigate();
   const tipoDefault = "Selecione um tipo de usuário";
   const tipos = [
     {
@@ -44,6 +51,8 @@ function Login() {
     reset,
     formState: { errors },
   } = useForm();
+
+  const { token, setToken, name, setName, type, setType } = useContext(UserContext);
 
   const atualizaTipo = (e) => {
     setTipo(e.target.value);
@@ -82,11 +91,14 @@ function Login() {
           );
           console.log("token",JSON.stringify(response?.data.token));
           sessionStorage.setItem('token', response.data.token);
+          setToken(response.data.token);
           sessionStorage.setItem('email', response.data.email);
           sessionStorage.setItem('name', response.data.name);
+          setName(response.data.name)
           sessionStorage.setItem('id', response.data.id);
           sessionStorage.setItem('type', "professional");
-          window.location.reload()
+          setType("professional");
+          navigate("/profile");
         } catch (error) {
           console.log("Error",error);
           
@@ -105,11 +117,14 @@ function Login() {
           console.log("Empresa", company);
           console.log("token",JSON.stringify(response?.data.token));
           sessionStorage.setItem('token', response.data.token);
+          setToken(response.data.token);
           sessionStorage.setItem('email', response.data.email);
           sessionStorage.setItem('name', response.data.name);
+          setName(response.data.name)
           sessionStorage.setItem('type', "company");
+          setType("company");
           sessionStorage.setItem('id', response.data.id);
-          window.location.reload()
+          navigate("/profile");
         } catch (error) {
           console.log(error);
         }

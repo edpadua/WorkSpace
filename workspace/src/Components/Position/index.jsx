@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 import axios from "axios";
 
@@ -9,7 +9,10 @@ import Datepicker from "react-tailwindcss-datepicker";
 
 import { getDates, getAgenda } from "../../Utils/dates";
 
-const dataPickerClass="w-full h-10 px-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline";
+import { UserContext } from "../../Contexts/User";
+
+const dataPickerClass =
+  "w-full h-10 px-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline";
 
 const Card = tw.div`
 rounded-lg border border-slate-300 p-4
@@ -52,6 +55,9 @@ function Position({ position }) {
   const [agenda, setAgenda] = useState(position.agenda);
 
   const [detalhes, setDetalhes] = useState(false);
+
+  const { token, setToken, name, setName, type, setType } =
+    useContext(UserContext);
 
   const [data, setData] = useState({
     startDate: null,
@@ -99,13 +105,25 @@ function Position({ position }) {
     setDatasCadastradas(newDates);
   };
 
+  const scheduleDates = (index) => {
+    const newAgenda = [...agenda];
+    const newDates = [...datasCadastradas];
+
+    newAgenda[index].status = "ocupado";
+    newAgenda[index].ocupante = sessionStorage.getItem("id");
+    newDates.splice(index, 1);
+
+    setAgenda(newAgenda);
+    setDatasCadastradas(newDates);
+  };
+
   const atualizaPosicao = async () => {
-    const position = {
-      id: posicaoAtual.id,
-      endereco: posicaoAtual.endereco,
-      departamento: posicaoAtual.departamento,
-      sala: posicaoAtual.sala,
-      mesa: posicaoAtual.mesa,
+    const positionUpdated = {
+      _id: position._id,
+      endereco: position.endereco,
+      departamento: position.departamento,
+      sala: position.sala,
+      mesa: position.mesa,
       agenda: agenda,
       datasAgendadas: datasCadastradas,
     };
@@ -114,17 +132,17 @@ function Position({ position }) {
       startDate: null,
       endDate: null,
     });
-
+ 
+    console.log("Posição Atual Id",position._id);
     console.log("Atualiza posição");
     console.log("professional", position);
 
     try {
       const response = await axios.put(
-        `http://localhost:3000/positions/${posicaoAtual.id}`,
-        JSON.stringify(position),
+        `http://localhost:3000/positions/${position._id}`,
+        JSON.stringify(positionUpdated),
         {
           headers: { "Content-Type": "application/json" },
-          withCredentials: true,
         }
       );
       console.log(JSON.stringify(response?.data));
@@ -132,6 +150,8 @@ function Position({ position }) {
       console.log(error);
     }
   };
+
+  
 
   return (
     <Card>
@@ -155,31 +175,75 @@ function Position({ position }) {
         <Lista>
           {agenda.map((item, index) => (
             <ListaItem key={index}>
-              <ListaTitulo>
-                Slot {index + 1}: {item.data} - {item.status}
-              </ListaTitulo>
+              {type == "company" ? (
+                <ListaTitulo>
+                  Data {index + 1}: {item.data} - {item.status}
+                </ListaTitulo>
+              ) : (
+                item.status == "disponivel" && (
+                  <ListaTitulo>
+                    Data {index + 1}: {item.data} - {item.status}
+                  </ListaTitulo>
+                )
+              )}
+
               <ButtonContainterList>
-                <Button onClick={() => removeDates(index)}>-</Button>
+                {type == "company" ? (
+                  <Button onClick={() => removeDates(index)}>-</Button>
+                ) : (
+                  <></>
+                )}
+                {item.status == "disponivel" && (
+                  <Button onClick={() => scheduleDates(index)}>Agendar</Button>
+                )}
               </ButtonContainterList>
             </ListaItem>
           ))}
 
-          <div className="flex p-4">
-            <Datepicker
-              inputClassName={dataPickerClass}
-              disabledDates={datasCadastradas}
-              placeholder={"Adicione um período de reserva"}
-              minDate={new Date()}
-              value={data}
-              onChange={handleDataChange}
-            />
-            <ButtonContainterAdicionar>
-              <Button onClick={addData}>+</Button>
-            </ButtonContainterAdicionar>
-          </div>
-          <ButtonContainterAtualizar>
-            <Button onClick={atualizaPosicao}>Atualiza</Button>
-          </ButtonContainterAtualizar>
+          {type == "company" ? (
+            <>
+              <div className="flex p-4">
+                <Datepicker
+                  inputClassName={dataPickerClass}
+                  disabledDates={datasCadastradas}
+                  placeholder={"Adicione um período de reserva"}
+                  minDate={new Date()}
+                  value={data}
+                  onChange={handleDataChange}
+                />
+                <ButtonContainterAdicionar>
+                  <Button onClick={addData}>+</Button>
+                </ButtonContainterAdicionar>
+              </div>
+              <ButtonContainterAtualizar>
+                <Button onClick={atualizaPosicao}>Atualiza</Button>
+              </ButtonContainterAtualizar>
+            </>
+          ) : (
+            <>
+              {agenda.filter(x => x.ocupante==sessionStorage.getItem("id")).length>0 &&
+                 <div className="flex w-full">
+                   <h2 className="p-4 float-left font-bold">Datas agendadas:</h2>
+                 </div>
+              }
+             
+
+              {agenda.map(
+                (item, index) =>
+                  item.status == "ocupado" &&
+                  item.ocupante == sessionStorage.getItem("id") && (
+                    <ListaItem key={index}>
+                      <ListaTitulo>
+                        Data {index + 1}: {item.data}
+                      </ListaTitulo>
+                    </ListaItem>
+                  )
+              )}
+              <ButtonContainterAtualizar>
+                <Button onClick={atualizaPosicao}>Salvar agendamento</Button>
+              </ButtonContainterAtualizar>
+            </>
+          )}
         </Lista>
       ) : (
         <></>
