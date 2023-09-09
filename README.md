@@ -8,4 +8,4 @@ Entre as funcionalidades do sistema estão:
 - Agendamento de posições por profissionais. Permite os usuários reservarem as posições nas datas disponíveis.
 
 Esta parte corresponde ao front end do sistema, no qual foi utilizada a biblioteca ReactJS, criado com o Vite. Neste módulo é feito o consumo de uma API Rest criada especificamemte para o sistema, utilizando a bilioteca Axios.
-Para os estilos o framework Tailwind CSS em conjunto com tailwind-styled-components. Para o gerenciamento de estados foi utilizado o Context API.
+Para os estilos o framework Tailwind CSS em conjunto com a biblioteca tailwind-styled-components. Para o gerenciamento de estados foi utilizado o Context API.
