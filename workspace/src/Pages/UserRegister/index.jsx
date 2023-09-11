@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 import { useForm, useController } from "react-hook-form";
 
-import tw from "tailwind-styled-components";
+import { UserContext } from "../../Contexts/User";
 
-import axios from "axios";
+import tw from "tailwind-styled-components";
 
 import {
   Form,
@@ -14,14 +14,13 @@ import {
   Error,
   Lista,
   ListaTitulo,
+  PageTitle,
 } from "../../GlobalStyles";
-
-const USER_REGISTER_URL = "/register";
 
 function UserRegister() {
   const tipoDefault = "Selecione um tipo de usuário";
 
-  const emailMensagem="Email já utilizado por outro usuário";
+  const emailMensagem = "Email já utilizado por outro usuário";
 
   const tipos = [
     {
@@ -46,6 +45,8 @@ function UserRegister() {
 
   const [emailExiste, setEmailExiste] = useState(false);
 
+  const { userRegister } = useContext(UserContext);
+
   const {
     register,
     handleSubmit,
@@ -58,76 +59,19 @@ function UserRegister() {
     setTipo(e.target.value);
   };
 
-  
   const onSubmit = async (data) => {
-    setClickSubmit(true);
-    console.log("data", data);
-    const profissional = {
-      name: data.name,
-      cpf: data.cpf,
-      email: data.email,
-      password: data.password,
-      endereco: data.endereco,
-    };
-
-    const empresa = {
-      name: data.razaosocial,
-      cnpj: data.cnpj,
-      email: data.email,
-      password: data.password,
-      enderecos: enderecos,
-    };
+    userRegister(data, tipo);
 
     reset({
       name: "",
-      razaosocial:"",
-      cpf:"",
-      cnpj:"",
+      razaosocial: "",
+      cpf: "",
+      cnpj: "",
       email: "",
       password: "",
-      enderecos:"",
-    })
-
-    console.log("professional", profissional);
-    console.log("tipo", tipo);
-    if (tipo == "profissional") {
-      try {
-        console.log("Professional", profissional);
-        const response = await axios.post(
-          "http://localhost:3000/professionals",
-          JSON.stringify(profissional),
-          {
-            headers: { "Content-Type": "application/json" },
-           
-          }
-        );
-        console.log(JSON.stringify(response?.data));
-        setEmailExiste(false);
-      } catch (error) {
-        console.log("Error",error);
-        setEmailExiste(true);
-      }
-    } else {
-      try {
-        console.log("Empresa", empresa);
-        const response = await axios.post(
-          "http://localhost:3000/companies",
-          JSON.stringify(empresa),
-          {
-            headers: { "Content-Type": "application/json" },
-            
-          }
-        );
-        console.log(JSON.stringify(response?.data));
-        setEmailExiste(false);
-      } catch (error) {
-        console.log(error);
-        setEmailExiste(true);
-      }
-    }
+      enderecos: "",
+    });
   };
-
-  
 
   const addEndereco = (e) => {
     e.preventDefault();
@@ -141,6 +85,7 @@ function UserRegister() {
 
   return (
     <div>
+      <PageTitle>Cadastro de Usuário</PageTitle>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Select
           name="tipo"
@@ -279,13 +224,15 @@ function UserRegister() {
               )}
               <Button onClick={addEndereco}>+</Button>
             </div>
-            <Lista>
-              {enderecos.map((item, index) => (
-                <ListaTitulo key={index}>
-                  Endereço {index + 1}: {item}
-                </ListaTitulo>
-              ))}
-            </Lista>
+            {enderecos.length>0 && (
+              <Lista>
+                {enderecos.map((item, index) => (
+                  <ListaTitulo key={index}>
+                    Endereço {index + 1}: {item}
+                  </ListaTitulo>
+                ))}
+              </Lista>
+            )}
           </>
         )}
         <Button type="submit">Registrar</Button>

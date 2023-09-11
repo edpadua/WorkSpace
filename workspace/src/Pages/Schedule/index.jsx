@@ -6,13 +6,13 @@ import Position from "../../Components/Position";
 
 import Datepicker from "react-tailwindcss-datepicker";
 
-import axios from "axios";
-
 import tw from "tailwind-styled-components";
 
 import { getDates, getAgenda } from "../../Utils/dates";
 
 import {UserContext} from "../../Contexts/User";
+
+import { PositionContext } from "../../Contexts/Position";
 
 const ListaPosicoes = tw.div`
    py-10 lg:w-1/2
@@ -27,6 +27,7 @@ import {
   Lista,
   ListaTitulo,
   ListaItem,
+  PageTitle,
 } from "../../GlobalStyles";
 
 function Schedule() {
@@ -36,6 +37,8 @@ function Schedule() {
     reset,
     formState: { errors },
   } = useForm();
+
+
 
   const [endereco, setEndereco] = useState("");
 
@@ -48,32 +51,21 @@ function Schedule() {
     endDate: null,
   });
 
-  const [posicoes, setPosicoes] = useState([]);
-
-  const [enderecoLista, setEnderecoLista] = useState([]);
-
-  const { token, setToken, name, setName, type, setType } = useContext(UserContext);
+  const { getPositions,  positions} = useContext(PositionContext);
 
   useEffect(() => {
-    const getPosicoes = async () => {
-      const url_pesquisa = "http://localhost:3000/positions";
+    getPositions();
+  }, [getPositions]);
 
-      const res = await axios.get(url_pesquisa);
-      setPosicoes(res.data);
-    };
-
-    getPosicoes();
-  }, [setPosicoes, posicoes]);
-
-
+  
   return (
     <div>
-      <h1>Agendas</h1>
+      <PageTitle>Agendas</PageTitle>
 
       <ListaPosicoes>
         
-        {posicoes.length > 0 &&
-          posicoes.map((position, index) =>
+        {positions.length > 0 &&
+          positions.map((position, index) =>
             
               <div key={index} className="pb-4">
                 <Position position={position} />

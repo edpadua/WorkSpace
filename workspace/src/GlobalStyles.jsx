@@ -16,10 +16,18 @@ w-full h-10 px-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounde
 export { Select };
 
 const Button = tw.button`
-hover:bg-teal-300 bg-teal-400 text-white font-bold py-2 px-4 rounded
+hover:bg-teal-300 bg-teal-400 text-white font-bold py-2 px-4 mb-2 rounded 
 `;
 
 export { Button };
+
+const Button2 = tw.button`
+hover:bg-teal-300 bg-teal-400 text-white font-bold py-2 px-4 my-2 rounded 
+`;
+
+export { Button2 };
+
+
 
 const Error = tw.p`
 z-10 pt-1 text-red-500 text-xs italic
@@ -46,3 +54,10 @@ const ListaTitulo = tw.h2`
 `;
 
 export { ListaTitulo };
+
+
+const PageTitle = tw.h1`
+    font-bold pb-6
+`;
+
+export { PageTitle };

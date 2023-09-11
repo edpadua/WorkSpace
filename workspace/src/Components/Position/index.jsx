@@ -1,8 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useContext } from "react";
 
-import axios from "axios";
-
 import tw from "tailwind-styled-components";
 
 import Datepicker from "react-tailwindcss-datepicker";
@@ -10,6 +8,8 @@ import Datepicker from "react-tailwindcss-datepicker";
 import { getDates, getAgenda } from "../../Utils/dates";
 
 import { UserContext } from "../../Contexts/User";
+
+import { PositionContext } from "../../Contexts/Position";
 
 const dataPickerClass =
   "w-full h-10 px-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline";
@@ -31,13 +31,14 @@ const ButtonContainterAdicionar = tw.div`
 `;
 
 const ButtonContainterAtualizar = tw.div`
-px-4
+px-4 pt-6
 `;
 
 import {
   Form,
   Input,
   Button,
+  Button2,
   Select,
   Error,
   Lista,
@@ -46,7 +47,9 @@ import {
 } from "../../GlobalStyles";
 
 function Position({ position }) {
-  const [posicaoAtual, setPosicaoAtual] = useState(position);
+
+
+  const [posicaoAtual] = useState(position);
 
   const [datasCadastradas, setDatasCadastradas] = useState(
     position.datasAgendadas
@@ -58,6 +61,9 @@ function Position({ position }) {
 
   const { token, setToken, name, setName, type, setType } =
     useContext(UserContext);
+
+  const { positionUpdate } =
+    useContext(PositionContext);
 
   const [data, setData] = useState({
     startDate: null,
@@ -117,6 +123,18 @@ function Position({ position }) {
     setDatasCadastradas(newDates);
   };
 
+  const unscheduleDates = (index) => {
+    const newAgenda = [...agenda];
+    const newDates = [...datasCadastradas];
+
+    newAgenda[index].status = "disponivel";
+    newAgenda[index].ocupante = sessionStorage.getItem("id");
+    newDates.splice(index, 1);
+
+    setAgenda(newAgenda);
+    setDatasCadastradas(newDates);
+  };
+
   const atualizaPosicao = async () => {
     const positionUpdated = {
       _id: position._id,
@@ -132,26 +150,14 @@ function Position({ position }) {
       startDate: null,
       endDate: null,
     });
- 
-    console.log("Posição Atual Id",position._id);
+
+    console.log("Posição Atual Id", position._id);
     console.log("Atualiza posição");
+    
     console.log("professional", position);
 
-    try {
-      const response = await axios.put(
-        `http://localhost:3000/positions/${position._id}`,
-        JSON.stringify(positionUpdated),
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      console.log(JSON.stringify(response?.data));
-    } catch (error) {
-      console.log(error);
-    }
+    positionUpdate(position,positionUpdated);
   };
-
-  
 
   return (
     <Card>
@@ -221,12 +227,12 @@ function Position({ position }) {
             </>
           ) : (
             <>
-              {agenda.filter(x => x.ocupante==sessionStorage.getItem("id")).length>0 &&
-                 <div className="flex w-full">
-                   <h2 className="p-4 float-left font-bold">Datas agendadas:</h2>
-                 </div>
-              }
-             
+              {agenda.filter((x) => x.ocupante == sessionStorage.getItem("id"))
+                .length > 0 && (
+                <div className="flex w-full">
+                  <h2 className="p-4 float-left font-bold">Datas agendadas:</h2>
+                </div>
+              )}
 
               {agenda.map(
                 (item, index) =>
@@ -234,8 +240,9 @@ function Position({ position }) {
                   item.ocupante == sessionStorage.getItem("id") && (
                     <ListaItem key={index}>
                       <ListaTitulo>
-                        Data {index + 1}: {item.data}
+                        {item.data}
                       </ListaTitulo>
+                      <Button2 onClick={() => unscheduleDates(index)}>Cancelar Reserva</Button2>
                     </ListaItem>
                   )
               )}

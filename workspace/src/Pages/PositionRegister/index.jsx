@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import { useForm } from "react-hook-form";
 
@@ -6,11 +6,13 @@ import Position from "../../Components/Position";
 
 import Datepicker from "react-tailwindcss-datepicker";
 
-import axios from "axios";
-
 import tw from "tailwind-styled-components";
 
 import { getDates, getAgenda } from "../../Utils/dates";
+
+import {PositionContext} from "../../Contexts/Position"
+
+import {UserContext} from "../../Contexts/User"
 
 const ListaPosicoes = tw.div`
    py-10 lg:w-1/2
@@ -52,40 +54,16 @@ function PositionRegister() {
     endDate: null,
   });
 
-  const [posicoes, setPosicoes] = useState([]);
 
-  const [enderecoLista, setEnderecoLista] = useState([]);
+
+  const { positionRegister, getPositions, positions } = useContext(PositionContext);
+
+  const { getAddresses, enderecoLista } = useContext(UserContext);
 
   useEffect(() => {
-    const getEnderecos = async () => {
-      console.log("Get endereços");
-      const enderecos = [];
-      const id = sessionStorage.getItem("id");
-      console.log("id company", id);
-      try {
-        const company = await axios.get(
-          `http://localhost:3000/companies/${id}`,
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        console.log(company);
-        console.log(company.data.enderecos);
-        company.data.enderecos.map((item) =>
-          enderecos.push({
-            label: item,
-            value: item,
-          })
-        );
-
-        setEnderecoLista(enderecos);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
+    
     if (sessionStorage.getItem("type") == "company") {
-      getEnderecos();
+      getAddresses();
     }
   }, []);
 
@@ -142,30 +120,13 @@ function PositionRegister() {
 
     console.log("professional", position);
 
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/positions",
-        JSON.stringify(position),
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      console.log(JSON.stringify(response?.data));
-    } catch (error) {
-      console.log(error);
-    }
+    positionRegister(position);
+    
   };
 
   useEffect(() => {
-    const getPosicoes = async () => {
-      const url_pesquisa = "http://localhost:3000/positions";
-
-      const res = await axios.get(url_pesquisa);
-      setPosicoes(res.data);
-    };
-
-    getPosicoes();
-  }, [setPosicoes, posicoes]);
+    getPositions();
+  }, [getPositions]);
 
   return (
     <div>
@@ -244,14 +205,14 @@ function PositionRegister() {
       </Form>
 
       <ListaPosicoes>
-        {posicoes.filter(
+        {positions.filter(
           (position) => position.id_company == sessionStorage.getItem("id")
-        ).length > 0 && posicoes.filter(
+        ).length > 0 && positions.filter(
           (position) => position.endereco == endereco
         ).length > 0 && <SecaoTitulo>Posições Cadastradas</SecaoTitulo>}
 
-        {posicoes.length > 0 &&
-          posicoes.map((position, index) =>
+        {positions.length > 0 &&
+          positions.map((position, index) =>
             position.id_company == sessionStorage.getItem("id") &&
             position.endereco == endereco ? (
               <div key={index} className="pb-4">
