@@ -71,11 +71,11 @@ npm run dev
 
 ## Licença
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distribuido sob a licença MIT. Veja `LICENSE.txt` para mais informações.
 
 
 ## Contato
 
 Eduardo de Pádua: ed.padua@gmail.com
 
-Project Link: [https://github.com/edpadua/WorkSpace/](https://github.com/edpadua/WorkSpace)
+Link: [https://github.com/edpadua/WorkSpace/](https://github.com/edpadua/WorkSpace)
