@@ -10,7 +10,6 @@
 
 - [Sobre](#sobre)
 - [Tecnologias](#tecnologias)
-- [API](#api)
 - [Setup](#setup)
 - [Licença](#licença)
 - [Contato](#contato)
@@ -57,10 +56,6 @@ Para os estilos o framework Tailwind CSS em conjunto com a biblioteca tailwind-s
 - [Tailwind Styled-Components](https://www.npmjs.com/package/tailwind-styled-components)
 - [React Form Hook](https://www.react-hook-form.com)
 - [Tailwind CSS](https://tailwindcss.com/)
-
-### API
-
-[WorkAPI](https://github.com/edpadua/WorkAPI)
 
 ## Setup
 
