@@ -10,6 +10,7 @@
 
 - [Sobre](#sobre)
 - [Tecnologias](#tecnologias)
+- [API](#api)
 - [Setup](#setup)
 - [Licença](#licença)
 - [Contato](#contato)
@@ -23,7 +24,7 @@ Entre as funcionalidades do sistema estão:
 - Cadastro de posições e datas, permitido para usuários do tipo empresa, onde as posições disponíveis nas empresas são registradas e são definidas as datas disponíveis de cada posição, além da edição destas posições.
 - Agendamento de posições por profissionais. Permite os usuários reservarem as posições nas datas disponíveis.
 
-Esta parte corresponde ao front end do sistema, no qual foi utilizada a biblioteca ReactJS, criado com o Vite. Neste módulo é feito o consumo de uma API Rest criada especificamemte para o sistema [WorkAPI](https://github.com/edpadua/WorkAPI) https://github.com/edpadua/WorkAPI, utilizando a bilioteca Axios.
+Esta parte corresponde ao front end do sistema, no qual foi utilizada a biblioteca ReactJS, criado com o Vite. Neste módulo é feito o consumo de uma API Rest criada especificamente para o sistema. https://github.com/edpadua/WorkAPI, utilizando a bilioteca Axios.
 Para os estilos o framework Tailwind CSS em conjunto com a biblioteca tailwind-styled-components. Para o gerenciamento de estados foi utilizado o Context API. A validação de formulários é realizada com a biblioteca React Form Hook.
 
 ### Agendamento de posições
@@ -56,6 +57,10 @@ Para os estilos o framework Tailwind CSS em conjunto com a biblioteca tailwind-s
 - [Tailwind Styled-Components](https://www.npmjs.com/package/tailwind-styled-components)
 - [React Form Hook](https://www.react-hook-form.com)
 - [Tailwind CSS](https://tailwindcss.com/)
+
+### API
+
+[WorkAPI](https://github.com/edpadua/WorkAPI)
 
 ## Setup
 
