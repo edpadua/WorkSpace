@@ -70,7 +70,7 @@ function Navbar() {
             {token ? (
               <>
                 <Li>
-                  <Link to="/">Início</Link>
+                  <Link to="/profile">Início</Link>
                 </Li>
                 <Li>
                   <Link to="/panel">Painel</Link>

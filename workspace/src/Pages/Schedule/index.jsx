@@ -15,7 +15,7 @@ import {UserContext} from "../../Contexts/User";
 import { PositionContext } from "../../Contexts/Position";
 
 const ListaPosicoes = tw.div`
-   py-10 lg:w-1/2
+   pb-10 lg:w-1/2
 `;
 
 import {
@@ -66,7 +66,7 @@ function Schedule() {
         
         {positions.length > 0 &&
           positions.map((position, index) =>
-            
+              
               <div key={index} className="pb-4">
                 <Position position={position} />
               </div>
